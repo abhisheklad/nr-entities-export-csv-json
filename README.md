@@ -31,7 +31,7 @@
 - GraphQL to retrieve Synthetics info
   - User could add additional attributes to the GraphQL query without issue (always test it to be sure)
   - If you update the GraphQL query, take note that `${cursor}` variable is added to `results(${cursor})`
-```json
+```
  {
         actor {
           entitySearch(queryBuilder: {domain: SYNTH}) {
@@ -76,7 +76,7 @@
 - GraphQL to retrieve APM agent info
   - User could add additional attributes to the GraphQL query without issue (always test it to be sure)
   - If you update the GraphQL query, take note that ${cursor} variable is added to results(${cursor})
-```json
+```
   {
     actor {
             user {
@@ -122,7 +122,7 @@
 - GraphQL to retrieve Infra agent info
   - User could add additional attributes to the GraphQL query without issue (always test it to be sure)
   - If you update the GraphQL query, take note that ${cursor} variable is added to results(${cursor})  
-```json
+```
     {
         actor {
             user {
