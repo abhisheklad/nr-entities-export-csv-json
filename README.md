@@ -9,6 +9,7 @@
 > Node.js is required as prerequisite, the scripts are tested with Node.js v18.18.0
 
     git clone git@github.com:haihongren/nr-export-csv-json.git
+    cd nr-export-csv-json
     npm install
 
 ### Set env variable NR_USER_KEY and export data
