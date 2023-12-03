@@ -1,0 +1,16 @@
+{
+  "name": "nr-export-csv-json",
+  "version": "1.0.0",
+  "description": "export entity info using graphql with pagination",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hren",
+  "license": "ISC",
+  "dependencies": {
+    "json-2-csv": "^5.0.1",
+    "lodash": "^4.17.21",
+    "request": "^2.88.2"
+  }
+}
