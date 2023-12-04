@@ -21,7 +21,9 @@
 ###  Export Synthetics entity info
 > - export Synthetics monitor entities using GraphQL with pagination support
 > 
-> - extract data based on regex pattern matching from Synthetics script, for example $secure.(KEYNAME) by default, require('PACKAGE'), etc.
+> - The script extracts $secure.<CREDENTIAL> data from the synthetics scripts using regex pattern.  
+By updating the regex pattern in the script, user can extract virtually any data from synthetics scripts.  
+For example,  to report all the modules used in the scripts, use [require\((.*)\) regex pattern.](https://github.com/haihongren/nr-export-csv-json/blob/9961a2068ff44fc72fa1d68a899ac931c506ad70/getSyntheticsInfo.js#L15)
 
     Usage: node getSyntheticsInfo.js [OPTIONS]
         Examples:
