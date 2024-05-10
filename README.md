@@ -4,9 +4,10 @@
 
 ### Installation 
 - Node.js is required as prerequisite, the scripts are tested with Node.js v20.12.2
-    https://github.com/abhisheklad/nr-entities-export-csv-json.git
-    cd nr-export-csv-json
-    npm install
+    
+      https://github.com/abhisheklad/nr-entities-export-csv-json.git
+      cd nr-export-csv-json
+      npm install
 
 ### Set env variable NR_USER_KEY and export data
     export NR_USER_KEY="YOUR NR USER KEY"
