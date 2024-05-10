@@ -1,7 +1,6 @@
 let $http = require('request') 
 let _ = require('lodash')
 let converter = require('json-2-csv');
-const fs = require('fs');
 
 const NR_USER_KEY = process.env.NR_USER_KEY;
 if (!NR_USER_KEY) {
@@ -130,7 +129,7 @@ async function getEntitiesData() {
                 return;
         }
     }else{
-        return console.log("Please provide Domain -d value")
+        return console.log("Please provide correct Domain -d value")
     }
     
     // console.log(domain);
