@@ -15,10 +15,10 @@
 ###  Export APM entity info
 - Export all APM entities using GraphQL with pagination support
 
-  Usage: node getEntities.js [OPTIONS]
-    Examples:
-    node getEntities.js -d apm -t csv   
-    node getEntities.js -d apm -t json   
+- Usage: node getEntities.js [OPTIONS]
+  - Examples:
+    - node getEntities.js -d apm -t csv   
+    - node getEntities.js -d apm -t json   
 
 - GraphQL to retrieve entities info
   - User could add additional attributes to the GraphQL query without issue (always test it to be sure)
