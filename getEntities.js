@@ -1,6 +1,7 @@
 let $http = require('request') 
 let _ = require('lodash')
 let converter = require('json-2-csv');
+const fs = require('fs');
 
 const NR_USER_KEY = process.env.NR_USER_KEY;
 if (!NR_USER_KEY) {
@@ -10,7 +11,8 @@ if (!NR_USER_KEY) {
 const NEWRELIC_DC = 'US' // datacenter for account - US or EU
 const GRAPHQL_ENDPOINT =
     NEWRELIC_DC === 'EU' ? 'api.eu.newrelic.com' : 'api.newrelic.com'
-const DEFAULT_TIMEOUT = 5000 
+const DEFAULT_TIMEOUT = 5000 // You can specify a timeout for each task
+
 
 const genericServiceCall = function (responseCodes, options, success) {
     !('timeout' in options) && (options.timeout = DEFAULT_TIMEOUT) //add a timeout if not already specified
@@ -38,7 +40,8 @@ const genericServiceCall = function (responseCodes, options, success) {
     })
 }
 
-async function getGraphQLData(NR_USER_KEY, nextCursor) {
+
+async function getGraphQLData(NR_USER_KEY, nextCursor, domain) {
     let cursor="cursor:null"
     if (nextCursor!=="") {
         cursor=`cursor: "${nextCursor}"`
@@ -46,41 +49,23 @@ async function getGraphQLData(NR_USER_KEY, nextCursor) {
     const graphQLQuery = `
     {
         actor {
-            user {
-              name
-            }
-            entitySearch(queryBuilder: {domain: APM, type: APPLICATION }
-            ) {
-              query
-              results(${cursor}) {
-                entities {
-                  account {
-                    name
-                    id
-                  }
-                  ... on ApmApplicationEntityOutline {
-                    guid
-                    name
-                    runningAgentVersions {
-                      maxVersion
-                      minVersion
-                    }
-                    type
-                    language
-                    lastReportingChangeAt
-                    reporting
-                    settings {
-                      apdexTarget
-                      serverSideConfig
-                    }
-                  }
+          entitySearch(queryBuilder: {domain: ${domain}}) {
+            results {
+              entities {
+                name
+                guid
+                entityType
+                account {
+                  id
+                  name
                 }
-                nextCursor
               }
+              nextCursor
             }
           }
-          }
-        `
+        }
+      } 
+    `
 
     const options = {
         url: `https://${GRAPHQL_ENDPOINT}/graphql`,
@@ -99,10 +84,10 @@ async function getGraphQLData(NR_USER_KEY, nextCursor) {
 }
 
 
-const fetchAttribute = async (NR_USER_KEY, nextCursor, attributes) => {
-    let nerdGraphResult = await getGraphQLData(NR_USER_KEY, nextCursor)
-    nextCursor && console.error(`more page... cursor-> ${nextCursor}`);    
+const fetchAttribute = async (NR_USER_KEY, nextCursor, attributes, domain) => {
+    let nerdGraphResult = await getGraphQLData(NR_USER_KEY, nextCursor, domain)
     const results = nerdGraphResult?.data?.actor?.entitySearch?.results?.entities ?? {};
+    nextCursor && console.error(`more page... cursor-> ${nextCursor}`);    
     nextCursor = nerdGraphResult?.data?.actor?.entitySearch?.results?.nextCursor || "";
     attributes = [...attributes, ...results]
 
@@ -114,10 +99,42 @@ const fetchAttribute = async (NR_USER_KEY, nextCursor, attributes) => {
 
 }
 
-async function getAPMEnvData() {
+async function getEntitiesData() {
     let attributes = []
     let cursor = ""
-    let fetchResult = await fetchAttribute(NR_USER_KEY, cursor, attributes)
+    let domain = ""
+    const indexOfDomainArg = process.argv.indexOf('-d');
+    const domainArgValue = indexOfDomainArg !== -1 ? process.argv[indexOfDomainArg + 1] : 'na';
+    if (domainArgValue != undefined){
+        switch (domainArgValue.toUpperCase()) {
+            case 'NA':
+                domain = console.log(`Please provide Domain value`);
+                return;
+            case 'APM':
+                domain = 'APM';
+                break;
+            case 'INFRASTRUCTURE':
+                domain = 'INFRA';
+                break;
+            case 'BROWSER':
+                domain = 'BROWSER';
+                break;
+            case 'MOBILE':
+                domain = 'MOBILE';
+                break;
+            case 'SYNTHETICS':
+                domain = 'SYNTH';
+                break;            
+            default:
+                console.log(`Please provide domain -d argument and its value`);
+                return;
+        }
+    }else{
+        return console.log("Please provide Domain -d value")
+    }
+    
+    // console.log(domain);
+    let fetchResult = await fetchAttribute(NR_USER_KEY, cursor, attributes, domain)
 
     // Check for the presence of the -t argument and its value
     const indexOfTypeArg = process.argv.indexOf('-t');
@@ -128,7 +145,6 @@ async function getAPMEnvData() {
     } else {
       console.log(converter.json2csv(fetchResult,{expandNestedObjects: true,expandArrayObjects:true,unwindArrays: true}));
     }
-  
 }
 
-getAPMEnvData()
+getEntitiesData()

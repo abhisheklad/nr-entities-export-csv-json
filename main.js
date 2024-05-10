@@ -2,36 +2,26 @@
 
 function printHelp() {
   console.log(`
+
+==> GET STARTED
+    
 ==> Install dependency packages
-    npm install
+        npm install
 
 ==> Set env variable NR_USER_KEY 
-    export NR_USER_KEY="YOUR NR USER KEY"
+        export NR_USER_KEY="YOUR NR USER KEY"
 
-==> Export APM agent entity info==== 
+==> Export entity info==== 
 
-    Usage: node getAPMAgentEnvInfo.js [OPTIONS]
-        Examples:
-        node getAPMAgentEnvInfo.js
-        node getAPMAgentEnvInfo.js -t csv
-        node getAPMAgentEnvInfo.js -t json
+    Usage: node getEntitie.js [OPTIONS]
 
-==> Export Infra agent entity info==== 
-
-    Usage: node getInfraAgentEnvInfo.js [OPTIONS]
-        Examples:
-        node getInfraAgentEnvInfo.js
-        node getInfraAgentEnvInfo.js -t csv
-        node getInfraAgentEnvInfo.js -t json
-
-==>  Export Synthetics entity info==== 
-
-    Usage: node getSyntheticsInfo.js [OPTIONS]
-        Examples:
-        node getSyntheticsInfo.js
-        node getSyntheticsInfo.js -t csv
-        node getSyntheticsInfo.js -t json
-
+      -d <DOMAIN>               New Relic Domain Value: apm, infrastructure, browser, mobile, synthetics
+      -t <EXPORTFORMAT>         Choose the format of data export: csv or json
+    
+    Examples:
+        node getEntitie.js -d APM
+        node getEntitie.js -d APM -t csv
+        node getEntitie.js -d APM -t json
 `);
 }
 printHelp();
