@@ -49,7 +49,7 @@ async function getGraphQLData(NR_USER_KEY, nextCursor, domain) {
     {
         actor {
           entitySearch(queryBuilder: {domain: ${domain}}) {
-            results {
+            results(${cursor}) {
               entities {
                 name
                 guid
