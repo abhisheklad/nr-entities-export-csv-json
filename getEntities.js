@@ -1,6 +1,7 @@
 let $http = require('request') 
 let _ = require('lodash')
 let converter = require('json-2-csv');
+const fs = require('fs');
 
 const NR_USER_KEY = process.env.NR_USER_KEY;
 if (!NR_USER_KEY) {
@@ -91,11 +92,24 @@ const fetchAttribute = async (NR_USER_KEY, nextCursor, attributes, domain) => {
     attributes = [...attributes, ...results]
 
     if (nextCursor) {
-        attributes = fetchAttribute(NR_USER_KEY, nextCursor, attributes)
+        attributes = fetchAttribute(NR_USER_KEY, nextCursor, attributes, domain)
     }
 
     return attributes
 
+}
+
+// Function to redirect console.log output to a file
+function redirectConsoleLogToFile(filename) {
+    // Create a writable stream to the log file
+    const logStream = fs.createWriteStream(filename, { flags: 'a' });
+
+    // Redirect console.log to the log file
+    const originalConsoleLog = console.log;
+    console.log = function(message) {
+        logStream.write(message + '\n');
+        originalConsoleLog.apply(console, arguments); // Output to console
+    };
 }
 
 async function getEntitiesData() {
@@ -140,8 +154,10 @@ async function getEntitiesData() {
     const typeArgValue = indexOfTypeArg !== -1 ? process.argv[indexOfTypeArg + 1] : 'csv';
 
     if (typeArgValue === 'json') {
+      redirectConsoleLogToFile('exportEntities.json');    
       console.log(JSON.stringify(fetchResult, null, 2));
     } else {
+      redirectConsoleLogToFile('exportEntities.csv');  
       console.log(converter.json2csv(fetchResult,{expandNestedObjects: true,expandArrayObjects:true,unwindArrays: true}));
     }
 }
