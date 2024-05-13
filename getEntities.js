@@ -153,11 +153,11 @@ async function getEntitiesData() {
     const indexOfTypeArg = process.argv.indexOf('-t');
     const typeArgValue = indexOfTypeArg !== -1 ? process.argv[indexOfTypeArg + 1] : 'csv';
 
-    if (typeArgValue === 'json') {
-      redirectConsoleLogToFile('exportEntities.json');    
+    if (typeArgValue === 'json') {    
+      redirectConsoleLogToFile('exportEntities.json');  
       console.log(JSON.stringify(fetchResult, null, 2));
     } else {
-      redirectConsoleLogToFile('exportEntities.csv');  
+      redirectConsoleLogToFile('exportEntities.csv');    
       console.log(converter.json2csv(fetchResult,{expandNestedObjects: true,expandArrayObjects:true,unwindArrays: true}));
     }
 }
