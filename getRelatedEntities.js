@@ -128,10 +128,7 @@ async function getRelatedData(NR_USER_KEY, nextCursor, attributes, guid) {
                 target {
                   entity {
                     name
-                    domain
-                    entityType
                     guid
-                    type
                   }
                 }
                 source {

@@ -130,5 +130,5 @@ dist
 .pnp.*
 
 #exported files
-.csv
-.json
+*.csv
+*.json

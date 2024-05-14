@@ -54,7 +54,8 @@ async function getGraphQLData(NR_USER_KEY, nextCursor, domain) {
               entities {
                 name
                 guid
-                entityType
+                type
+                reporting
                 account {
                   id
                   name
