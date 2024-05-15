@@ -121,7 +121,7 @@ async function getRelatedData(NR_USER_KEY, nextCursor, attributes, guid) {
     {
         actor {
           entity(guid: "${guid}") {
-            relatedEntities(
+            relatedEntities(${cursor})(
               filter: {entityDomainTypes: {include: {domain: "EXTERNAL", type: "SERVICE"}}}
             ) {
               results {
