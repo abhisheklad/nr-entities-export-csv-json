@@ -120,10 +120,12 @@ async function getRelatedData(NR_USER_KEY, nextCursor, attributes, guid) {
     const graphQLQuery = `
     {
         actor {
-          entity(guid: "${guid}") {
-            relatedEntities(${cursor})(
+          entity(guid: "${guid}") { 
+            relatedEntities(
               filter: {entityDomainTypes: {include: {domain: "EXTERNAL", type: "SERVICE"}}}
-            ) {
+              ${cursor}
+            )
+            {
               results {
                 target {
                   entity {
